@@ -1,6 +1,6 @@
 {
     "name": "Slightly Improved Tab Groups",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "Make new tab group tabs inherit the first tabs container",
     "manifest_version": 3,
     "icons": {},
