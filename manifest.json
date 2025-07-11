@@ -3,6 +3,11 @@
     "version": "1.0.0",
     "description": "Make new tab group tabs inherit the first tabs container",
     "manifest_version": 3,
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "sitg@cuboidraptor.github.io"
+        }
+    },
     "icons": {
         "128": "icon128.png"
     },
