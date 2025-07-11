@@ -21,7 +21,11 @@ function handleTabCreated(tab) {
                     // put the listener back
                     browser.tabs.onCreated.addListener(handleTabCreated);
                     // remove the old tab that has the incorrect container
-                    browser.tabs.remove(tab.id);
+                        // but I also reuse this function for the action new tab so in that case
+                        // there's not extra tab to close
+                    if (typeof tab.id !== "undefined") {
+                        browser.tabs.remove(tab.id);
+                    }
                     // and then set its group correctly
                     if (tab.groupId !== -1) {
                         browser.tabs.group({groupId: tab.groupId, tabIds: newTab.id});
@@ -31,5 +35,23 @@ function handleTabCreated(tab) {
         })
     }
 }
-
 browser.tabs.onCreated.addListener(handleTabCreated);
+
+function newGroupedTab() {
+    // open new tab in current group when icon is pressed
+    browser.tabs.query({active: true}).then((currentTab) => {
+        currentTab = currentTab[0];
+        console.log(currentTab);
+        handleTabCreated({
+            active: true, // new tab should probably be active
+            cookieStoreId: null, // this will get overwritten by the container check
+                // so we want it be wrong otherwise optimisations prevent stuff from happening
+            groupId: currentTab.groupId,
+            status: "complete",
+            title: "New Tab",
+            windowId: currentTab.windowId
+        });
+    });
+}
+
+browser.action.onClicked.addListener(newGroupedTab)

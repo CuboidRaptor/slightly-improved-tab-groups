@@ -10,6 +10,11 @@
         "tabs",
         "cookies"
     ],
+    "action": {
+        "default_icon": {
+            "128": "icon128.png"
+        }
+    },
     "background": {
         "scripts": [
             "background.js"
