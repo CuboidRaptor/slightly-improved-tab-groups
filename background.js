@@ -5,7 +5,9 @@ function handleTabCreated(tab) {
             // find leftmost tab by searching for lowest index
             let firstTab = tabs.reduce((acc, cur) => ((cur.index < acc.index) ? cur : acc));
 
-            if (tab.groupId === -1) {
+            if ((tab.groupId === -1) && (tab.cookieStoreId !== null)) {
+                // if the new tab is not in a window and it isn't an extension action press,
+                        // don't chcange the tab container
                 return;
             }
 
@@ -32,7 +34,9 @@ function handleTabCreated(tab) {
                     }
 
                     // and then set its group correctly
-                    browser.tabs.group({groupId: tab.groupId, tabIds: newTab.id});
+                    if (tab.groupId !== -1) {
+                        browser.tabs.group({groupId: tab.groupId, tabIds: newTab.id});
+                    }
                 });
             }
         })
@@ -44,7 +48,6 @@ function newGroupedTab() {
     // open new tab in current group when icon is pressed
     browser.tabs.query({active: true}).then((currentTab) => {
         currentTab = currentTab[0];
-        console.log(currentTab);
         handleTabCreated({
             active: true, // new tab should probably be active
             cookieStoreId: null, // this will get overwritten by the container check
