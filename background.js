@@ -5,6 +5,10 @@ function handleTabCreated(tab) {
             // find leftmost tab by searching for lowest index
             let firstTab = tabs.reduce((acc, cur) => ((cur.index < acc.index) ? cur : acc));
 
+            if (tab.groupId === -1) {
+                return;
+            }
+
             if (tab.cookieStoreId !== firstTab.cookieStoreId) {
                 // remove the listener to lock it and prevent an infinite loop
                 browser.tabs.onCreated.removeListener(handleTabCreated);
@@ -26,10 +30,9 @@ function handleTabCreated(tab) {
                     if (typeof tab.id !== "undefined") {
                         browser.tabs.remove(tab.id);
                     }
+
                     // and then set its group correctly
-                    if (tab.groupId !== -1) {
-                        browser.tabs.group({groupId: tab.groupId, tabIds: newTab.id});
-                    }
+                    browser.tabs.group({groupId: tab.groupId, tabIds: newTab.id});
                 });
             }
         })
